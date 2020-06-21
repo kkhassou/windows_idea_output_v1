@@ -34,7 +34,7 @@ namespace WindowsFormsApp3
             listBox1.DataSource = null;
             listBox1.DataSource = data;
             var temp = realm.All<DB_Model.Hint_db>();
-            if (true)
+            if (false)
             {
                 realm.Write(() =>
                 {
