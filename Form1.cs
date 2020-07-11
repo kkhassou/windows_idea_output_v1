@@ -28,5 +28,10 @@ namespace WindowsFormsApp3
         {
 
         }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
+        }
     }
 }

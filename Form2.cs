@@ -119,8 +119,10 @@ namespace WindowsFormsApp3
                     Console.WriteLine("L91 one = {0}", dialog1.textBox.Text);
                     //listBox1.Items.Add(dialog1.textBox.Text);
                     data.Add(dialog1.textBox.Text);
+
                     listBox1.DataSource = null;
                     listBox1.DataSource = data;
+                    
                     // テーマをDBに追加
                     realm.Write(() =>
                     {
@@ -216,25 +218,28 @@ namespace WindowsFormsApp3
             string[] arr = dialog8.textBox3.Text.Split(del, StringSplitOptions.None);
             foreach (var one in arr)
             {
-                bool flag = false;
-                foreach (var row in realm.All<DB_Model.Idea_db>())
+                if (one != null)
                 {
-                    if (row.theme == one)
+                    bool flag = false;
+                    foreach (var row in realm.All<DB_Model.Idea_db>())
                     {
-                        flag = true;
-                    }
-                }
-                if (flag == false)
-                {
-                    realm.Write(() =>
-                    {
-                        realm.Add(new DB_Model.Idea_db
+                        if (row.theme == one)
                         {
-                            theme = one,
+                            flag = true;
+                        }
+                    }
+                    if (flag == false)
+                    {
+                        realm.Write(() =>
+                        {
+                            realm.Add(new DB_Model.Idea_db
+                            {
+                                theme = one,
+                            });
                         });
-                    });
-                    Console.WriteLine("L163");
-                    data.Add(one);
+                        Console.WriteLine("L163");
+                        data.Add(one);
+                    }
                 }
             }
             listBox1.DataSource = null;
@@ -244,6 +249,16 @@ namespace WindowsFormsApp3
         private void Form2_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void Form2_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
         }
     }
 

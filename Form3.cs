@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Realms;
 using System.IO;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
 
 namespace WindowsFormsApp3
 {
@@ -18,15 +19,19 @@ namespace WindowsFormsApp3
 
         Realm realm;
         public RealmConfiguration Config;
+        ObservableCollection<String> data = new ObservableCollection<String>();
         string selected_category = "シンプル_1";
         public string daialog_message = "";
-
+        int m_order = -99;
+        string m_theme = "";
         public Form3()
         {
             InitializeComponent();
             Config = new RealmConfiguration(Path.Combine(
                 Directory.GetCurrentDirectory(), "Notification.realm"));
             realm = Realm.GetInstance(Config);
+            listBox1.DataSource = null;
+            listBox1.DataSource = data;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -53,7 +58,11 @@ namespace WindowsFormsApp3
                             idea = textBox1.Text
                         });
                     });
-                    listBox1.Items.Add(textBox1.Text);
+                    //listBox1.Items.Add(textBox1.Text);
+                    data.Add(textBox1.Text);
+                    listBox1.DataSource = null;
+                    listBox1.DataSource = data;
+
                     List<string> test = new List<string>();
                     foreach (var row in realm.All<DB_Model.Hint_db>().Where(d => d.category == selected_category))
                     {
@@ -88,21 +97,30 @@ namespace WindowsFormsApp3
         private void Form3_VisibleChanged(object sender, EventArgs e)
         {
             label1.Text = Program.f2.sendText;
-            listBox1.Items.Clear();
-            foreach (var row in realm.All<DB_Model.Idea_db>().Where(d => d.theme == Program.f2.sendText))
+            m_theme = Program.f2.sendText;
+            //テーマの総数を取得
+            List<string> temp = new List<string>();
+            foreach (var row in realm.All<DB_Model.Idea_db>())
             {
-                if (row.idea != null) {
-                    listBox1.Items.Add(row.idea);
+                temp.Add(row.theme);
+            }
+
+            var testDistinct = temp.Distinct();
+            // 前の画面からきたテーマが何番目のテーマかを取得
+            // 順番は保証されてる前提で進める
+            int num = 1;
+            foreach (var one in testDistinct)
+            {
+                if (one == Program.f2.sendText)
+                {
+                    m_order = num;
                 }
+                num = num + 1;
             }
-            List<string> test = new List<string>();
-            foreach (var row in realm.All<DB_Model.Hint_db>().Where(d => d.category == selected_category))
-            {
-                test.Add(row.hint);
-            }
-            Random r1 = new System.Random();
-            int r2 = r1.Next(0, test.Count);
-            label3.Text = test[r2];
+            label5.Text = m_order + " / " + testDistinct.Count().ToString();
+
+            first_appear();
+
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -176,6 +194,95 @@ namespace WindowsFormsApp3
         private void Form3_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            //テーマの総数を取得
+            List<string> temp = new List<string>();
+            foreach (var row in realm.All<DB_Model.Idea_db>())
+            {
+                temp.Add(row.theme);
+            }
+
+            var testDistinct = temp.Distinct();
+            
+            // 前の画面からきたテーマが何番目のテーマかを取得
+            // 順番は保証されてる前提で進める
+            if (m_order > 1)
+            {
+                m_order = m_order - 1;
+                Console.WriteLine("testDistinct.ElementAt(m_order)");
+                Console.WriteLine(testDistinct.ElementAt(m_order - 1));
+                label1.Text = testDistinct.ElementAt(m_order - 1);
+                m_theme = testDistinct.ElementAt(m_order - 1);
+                label5.Text = m_order + " / " + testDistinct.Count().ToString();
+
+                first_appear();
+            }
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+            //テーマの総数を取得
+            List<string> temp = new List<string>();
+            foreach (var row in realm.All<DB_Model.Idea_db>())
+            {
+                temp.Add(row.theme);
+            }
+
+            var testDistinct = temp.Distinct();
+
+            // 前の画面からきたテーマが何番目のテーマかを取得
+            // 順番は保証されてる前提で進める
+            if (m_order < testDistinct.Count())
+            {
+                m_order = m_order + 1;
+                Console.WriteLine("testDistinct.ElementAt(m_order)");
+                Console.WriteLine(m_order);
+                label1.Text = testDistinct.ElementAt(m_order - 1);
+                m_theme = testDistinct.ElementAt(m_order - 1);
+                label5.Text = m_order + " / " + testDistinct.Count().ToString();
+
+                first_appear();
+            }
+        }
+        private void first_appear()
+        {
+            //listBox1.Items.Clear();
+            //data.Add(dialog1.textBox.Text);
+            //data = null;
+            //listBox1.DataSource = null;
+            //listBox1.DataSource = data;
+            data.Clear();
+            foreach (var row in realm.All<DB_Model.Idea_db>().Where(d => d.theme == m_theme))
+            {
+                if (row.idea != null)
+                {
+                    //listBox1.Items.Add(row.idea);
+                    data.Add(row.idea);
+                }
+            }
+            listBox1.DataSource = null;
+            listBox1.DataSource = data;
+            List<string> test = new List<string>();
+            foreach (var row in realm.All<DB_Model.Hint_db>().Where(d => d.category == selected_category))
+            {
+                test.Add(row.hint);
+            }
+            Random r1 = new System.Random();
+            int r2 = r1.Next(0, test.Count);
+            label3.Text = test[r2];
+        }
+
+        private void Form3_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Application.Exit();
         }
     }
 
@@ -333,7 +440,9 @@ namespace WindowsFormsApp3
             temp = temp + "theme:" + Program.f2.sendText + "\r\n";
             foreach (var row in realm.All<DB_Model.Idea_db>().Where(d => d.theme == Program.f2.sendText))
             {
-                temp = temp + "・" + row.idea + "\r\n";
+                if (row.idea != null) {
+                    temp = temp + "・" + row.idea + "\r\n";
+                }
             }
             textBox3.Text = temp;
 

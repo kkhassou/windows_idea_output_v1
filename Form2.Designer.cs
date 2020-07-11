@@ -34,11 +34,12 @@
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
+            this.button6 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(264, 393);
+            this.button1.Location = new System.Drawing.Point(250, 519);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(80, 23);
             this.button1.TabIndex = 0;
@@ -48,7 +49,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(40, 394);
+            this.button2.Location = new System.Drawing.Point(12, 519);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 1;
@@ -58,7 +59,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(152, 393);
+            this.button3.Location = new System.Drawing.Point(133, 519);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(75, 23);
             this.button3.TabIndex = 2;
@@ -70,14 +71,14 @@
             // 
             this.listBox1.FormattingEnabled = true;
             this.listBox1.ItemHeight = 12;
-            this.listBox1.Location = new System.Drawing.Point(40, 45);
+            this.listBox1.Location = new System.Drawing.Point(12, 21);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(696, 328);
+            this.listBox1.Size = new System.Drawing.Size(879, 484);
             this.listBox1.TabIndex = 3;
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(386, 393);
+            this.button4.Location = new System.Drawing.Point(371, 519);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(89, 23);
             this.button4.TabIndex = 4;
@@ -87,7 +88,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(515, 393);
+            this.button5.Location = new System.Drawing.Point(505, 519);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(166, 23);
             this.button5.TabIndex = 5;
@@ -95,11 +96,22 @@
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(12, 558);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(75, 23);
+            this.button6.TabIndex = 6;
+            this.button6.Text = "アプリ閉じる";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(903, 593);
+            this.Controls.Add(this.button6);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.listBox1);
@@ -108,6 +120,7 @@
             this.Controls.Add(this.button1);
             this.Name = "Form2";
             this.Text = "Form2";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form2_FormClosing);
             this.Load += new System.EventHandler(this.Form2_Load);
             this.VisibleChanged += new System.EventHandler(this.Form2_VisibleChanged);
             this.ResumeLayout(false);
@@ -122,5 +135,6 @@
         private System.Windows.Forms.ListBox listBox1;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button6;
     }
 }
